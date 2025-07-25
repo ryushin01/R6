@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<!-- saved from url=(0049)https://goodgid.github.io/HTTPS-Used-In-Practice/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까?</title>
+    <meta name="description" content="  ProloguePrologue      다음과 같은 질문을 받았다.        Q. HTTPS를 사용하면 클라가 데이터를 암호화해서 전달할 필요가 있나?        위 질문에 대해 고민을 해보고 깨달은 바가 있어서 글을 작성하게 되었다.        우선 이 질문에 대한 답...">
+
+    <meta property="og:image" content="/assets/img/logo.png">
+
+    <link rel="shortcut icon" href="https://goodgid.github.io/favicon.ico?" type="image/x-icon">
+    <link rel="icon" href="https://goodgid.github.io/favicon.ico?" type="image/x-icon">
+    <link rel="stylesheet" href="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/font-awesome.min.css">
+    <link rel="stylesheet" href="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/font_8v3czwksspqlg14i.css">
+    <link rel="stylesheet" href="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/main.css">
+    <link rel="canonical" href="https://goodgid.github.io/HTTPS-Used-In-Practice/">
+    <link rel="alternate" type="application/rss+xml" title="Gidhub" href="https://goodgid.github.io/feed.xml">
+    <link rel="stylesheet" href="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/kakaopay-modal.css">
+
+    <script src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/twk-main.js" charset="UTF-8" crossorigin="*"></script><script src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/twk-vendor.js" charset="UTF-8" crossorigin="*"></script><script src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/twk-chunk-vendors.js" charset="UTF-8" crossorigin="*"></script><script src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/twk-chunk-common.js" charset="UTF-8" crossorigin="*"></script><script src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/twk-runtime.js" charset="UTF-8" crossorigin="*"></script><script src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/twk-app.js" charset="UTF-8" crossorigin="*"></script><script src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/f.txt"></script><script src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/f(1).txt"></script><script async="" src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/default" charset="UTF-8" crossorigin="*"></script><script async="" src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/analytics.js"></script><script src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/pageCounting.js" charset="utf-8"></script>
+
+    
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'G-F215KGK91L', 'auto');
+      ga('send', 'pageview');
+    </script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async="" src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/js"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-F215KGK91L');
+    </script>
+    
+    
+    <script async="" src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/f(2).txt" crossorigin="anonymous" data-checked-head="true"></script>
+
+    
+
+<meta http-equiv="origin-trial" content="AlK2UR5SkAlj8jjdEc9p3F3xuFYlF6LYjAML3EOqw1g26eCwWPjdmecULvBH5MVPoqKYrOfPhYVL71xAXI1IBQoAAAB8eyJvcmlnaW4iOiJodHRwczovL2RvdWJsZWNsaWNrLm5ldDo0NDMiLCJmZWF0dXJlIjoiV2ViVmlld1hSZXF1ZXN0ZWRXaXRoRGVwcmVjYXRpb24iLCJleHBpcnkiOjE3NTgwNjcxOTksImlzU3ViZG9tYWluIjp0cnVlfQ=="><meta http-equiv="origin-trial" content="Amm8/NmvvQfhwCib6I7ZsmUxiSCfOxWxHayJwyU1r3gRIItzr7bNQid6O8ZYaE1GSQTa69WwhPC9flq/oYkRBwsAAACCeyJvcmlnaW4iOiJodHRwczovL2dvb2dsZXN5bmRpY2F0aW9uLmNvbTo0NDMiLCJmZWF0dXJlIjoiV2ViVmlld1hSZXF1ZXN0ZWRXaXRoRGVwcmVjYXRpb24iLCJleHBpcnkiOjE3NTgwNjcxOTksImlzU3ViZG9tYWluIjp0cnVlfQ=="><meta http-equiv="origin-trial" content="A9wSqI5i0iwGdf6L1CERNdmsTPgVu44ewj8QxTBYgsv1LCPUVF7YmWOvTappqB1139jAymxUW/RO8zmMqo4zlAAAAACNeyJvcmlnaW4iOiJodHRwczovL2RvdWJsZWNsaWNrLm5ldDo0NDMiLCJmZWF0dXJlIjoiRmxlZGdlQmlkZGluZ0FuZEF1Y3Rpb25TZXJ2ZXIiLCJleHBpcnkiOjE3MzY4MTI4MDAsImlzU3ViZG9tYWluIjp0cnVlLCJpc1RoaXJkUGFydHkiOnRydWV9"><meta http-equiv="origin-trial" content="A+d7vJfYtay4OUbdtRPZA3y7bKQLsxaMEPmxgfhBGqKXNrdkCQeJlUwqa6EBbSfjwFtJWTrWIioXeMW+y8bWAgQAAACTeyJvcmlnaW4iOiJodHRwczovL2dvb2dsZXN5bmRpY2F0aW9uLmNvbTo0NDMiLCJmZWF0dXJlIjoiRmxlZGdlQmlkZGluZ0FuZEF1Y3Rpb25TZXJ2ZXIiLCJleHBpcnkiOjE3MzY4MTI4MDAsImlzU3ViZG9tYWluIjp0cnVlLCJpc1RoaXJkUGFydHkiOnRydWV9"><script async="" src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/ca-pub-4996706708919191"></script><script async="" src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/AGSKWxXeqme9TW7GfUdZ32RwYj8V-oK5gNVHRQjO-AOmdTEPnc3wCnLXuBDqPg4zAVIw2UUNp-FuigKXkF0AHU5ZCmfZ7MwSF9CCQfUY4xRSrybuRK7GRf9q3Aja7khj-pTuxeP-Ac3eoA=="></script><script async="" src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/AGSKWxXtunp9nXf5-FKML2Xokqsk5W1hI6ZG86oASWLL0JnBoeEX0svLzOQnRRiSEECeXbmoYVyWCvK_rum9ijNTXNkI-luulH0JLZJxo4Qg_RyKiu83TreYWQTrLfMynmueYymrJjqBTQ=="></script><script async="" src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/AGSKWxX2UWjGbKnejdwFPlB43T7WOqZhNxIQMSZvurmgblCH6F6CmxorKtugr7QPApzfOpip2vktmW2uUQsB93hwsFhHon_55jiiINQ53AfFrfPA6GJYg-HqKLg_Je2KgLlDRsv_cC44sw=="></script><script charset="utf-8" src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/twk-chunk-2d0d2b7c.js"></script><script charset="utf-8" src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/twk-chunk-2d224aff.js"></script><script charset="utf-8" src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/twk-chunk-2d0aef27.js"></script><script charset="utf-8" src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/twk-chunk-2d0b383d.js"></script><script charset="utf-8" src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/twk-chunk-2d0da3af.js"></script><script charset="utf-8" src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/twk-chunk-4fe9d5dd.js"></script><script charset="utf-8" src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/twk-chunk-7941cc06.js"></script><script charset="utf-8" src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/twk-chunk-6289ff8e.js"></script><script charset="utf-8" src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/twk-chunk-2d0c8092.js"></script><style type="text/css">#yhq3g5lc6foc1753317618638 {outline:none !important;
+visibility:visible !important;
+resize:none !important;
+box-shadow:none !important;
+overflow:visible !important;
+background:none !important;
+opacity:1 !important;
+filter:alpha(opacity=100) !important;
+-ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity 1}) !important;
+-mz-opacity:1 !important;
+-khtml-opacity:1 !important;
+top:auto !important;
+right:0px !important;
+bottom:0px !important;
+left:auto !important;
+position:fixed !important;
+border:0 !important;
+min-height:0px  !important;
+min-width:0px  !important;
+max-height:none  !important;
+max-width:none  !important;
+padding:0px !important;
+margin:0px !important;
+-moz-transition-property:none !important;
+-webkit-transition-property:none !important;
+-o-transition-property:none !important;
+transition-property:none !important;
+transform:none !important;
+-webkit-transform:none !important;
+-ms-transform:none !important;
+width:auto !important;
+height:auto  !important;
+display:none !important;
+z-index:2000000000 !important;
+background-color:transparent !important;
+cursor:none !important;
+float:none !important;
+border-radius:unset !important;
+pointer-events:auto !important;
+clip:auto !important;
+color-scheme:light !important;}#yhq3g5lc6foc1753317618638.widget-hidden {display: none !important;}#yhq3g5lc6foc1753317618638.widget-visible {display: block !important;}
+@media print{
+ #yhq3g5lc6foc1753317618638.widget-visible { 
+display: none !important;
+ }
+}</style><style type="text/css">.tawk-button-hover[data-v-2fc2d95d]:focus,.tawk-button-hover[data-v-2fc2d95d]:hover{background-color:hsla(0,0%,100%,.2)!important;border-radius:5px!important}</style><style type="text/css">@keyframes tawkMaxOpen{0%{opacity:0;transform:translate(0, 30px);;}to{opacity:1;transform:translate(0, 0px);}}@-moz-keyframes tawkMaxOpen{0%{opacity:0;transform:translate(0, 30px);;}to{opacity:1;transform:translate(0, 0px);}}@-webkit-keyframes tawkMaxOpen{0%{opacity:0;transform:translate(0, 30px);;}to{opacity:1;transform:translate(0, 0px);}}#msb1d6p2f8mo1753317618762.open{animation : tawkMaxOpen .25s ease!important;}@keyframes tawkMaxClose{from{opacity: 1;transform:translate(0, 0px);;}to{opacity: 0;transform:translate(0, 30px);;}}@-moz-keyframes tawkMaxClose{from{opacity: 1;transform:translate(0, 0px);;}to{opacity: 0;transform:translate(0, 30px);;}}@-webkit-keyframes tawkMaxClose{from{opacity: 1;transform:translate(0, 0px);;}to{opacity: 0;transform:translate(0, 30px);;}}#msb1d6p2f8mo1753317618762.closed{animation: tawkMaxClose .25s ease!important}</style><script src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/emojione.min.js" type="text/javascript" async="" defer=""></script></head>
+
+
+  <body aria-hidden="false" style="">
+    <header id="top">
+    <div class="wrapper">
+        <a href="https://goodgid.github.io/" class="brand">Gidhub</a>
+        <small>BE Developer</small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="https://goodgid.github.io/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+                
+                
+                    
+                <li>
+                         
+                        <a href="https://goodgid.github.io/archive/">
+                        
+                        
+                    <i class="fa fa-archive"></i>Archives
+                    </a>
+                </li>
+                    
+                
+                    
+                <li>
+                         
+                        <a href="https://goodgid.github.io/2025-Retrospective/">
+                        
+                        
+                    <i class="fa fa-keyboard-o"></i>2025 Dev
+                    </a>
+                </li>
+                    
+                
+                    
+                <li>
+                         
+                        <a href="https://goodgid.github.io/category/">
+                        
+                        
+                    <i class="fa fa-th-list"></i>Categories
+                    </a>
+                </li>
+                    
+                
+                    
+                <li>
+                         
+                        <a href="https://goodgid.github.io/about/">
+                        
+                        
+                    <i class="fa fa-heart"></i>About
+                    </a>
+                </li>
+                    
+                
+                    
+                <li>
+                         
+                        <a href="https://goodgid.github.io/search/">
+                        
+                        
+                    <i class="fa fa-search"></i>Search
+                    </a>
+                </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+
+                <li class="li-kakaopay-btn">
+                    <!-- Trigger/Open The Modal -->
+                    <button id="kakaoPayBtn"><img src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/kakaopay_logo.png"></button>
+
+                    <!-- The Modal -->
+                    <div id="myModal" class="modal">
+                        <!-- Modal content -->
+                        <div class="modal-content">
+                            <img src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/kakaopay_qr.png" class="kakaopay-qr-img">
+                            <p>글이 도움이 되었을까요? 😀</p>
+                        </div>
+                    </div>
+                </li>
+
+                <!-- <li>
+                    <style>
+                    .bmc-button img{width: 17px !important;margin-bottom: 1px !important;box-shadow: none !important;border: none !important;vertical-align: middle !important;}
+                    .bmc-button{line-height: 36px !important;height:37px !important;text-decoration: none !important;/* display:inline-flex !important; */color:#FFFFFF !important;background-color:#FF813F !important;border-radius: 3px !important;border: 1px solid transparent !important;padding: 1px 9px !important;font-size: 17px !important;letter-spacing: 0.6px !important;box-shadow: 0px 1px 2px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 1px 2px 2px rgba(190, 190, 190, 0.5) !important;margin: 0 auto !important;font-family:'Cookie', cursive !important;-webkit-box-sizing: border-box !important;box-sizing: border-box !important;-o-transition: 0.3s all linear !important;-webkit-transition: 0.3s all linear !important;-moz-transition: 0.3s all linear !important;-ms-transition: 0.3s all linear !important;transition: 0.3s all linear !important;}.bmc-button:hover, .bmc-button:active, .bmc-button:focus {-webkit-box-shadow: 0px 1px 2px 2px rgba(190, 190, 190, 0.5) !important;text-decoration: none !important;box-shadow: 0px 1px 2px 2px rgba(190, 190, 190, 0.5) !important;opacity: 0.85 !important;color:#FFFFFF !important;}
+                    </style>
+                    <link href="https://fonts.googleapis.com/css?family=Cookie" rel="stylesheet">
+                    <a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/equEhZO">
+                        <img src="https://bmc-cdn.nyc3.digitaloceanspaces.com/BMC-button-images/BMC-btn-logo.svg" alt="Buy me a coffee">
+                        <span style="margin-left:5px">Buy me a coffee</span>
+                    </a>
+                </li> -->
+
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<script src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/kakaopay.js"> </script>
+    
+        <div class="page clearfix" post="">
+    <div class="left">
+        <h1> HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까? </h1>
+        <div class="label">
+
+            <div class="label-card">
+                <i class="fa fa-calendar"></i>2020-04-26
+            </div>
+
+            <div class="label-card">
+                <i class="fa fa-user"></i>goodGid
+                
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+            
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="https://goodgid.github.io/category/#HTTP" title="Category: HTTP" rel="category">HTTP</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+            </div>
+
+        </div>
+        <hr>
+        <article itemscope="" itemtype="http://schema.org/BlogPosting">
+        <ul id="markdown-toc">
+  <li><a href="https://goodgid.github.io/HTTPS-Used-In-Practice/#prologue" id="markdown-toc-prologue">Prologue</a></li>
+  <li><a href="https://goodgid.github.io/HTTPS-Used-In-Practice/#https-%EA%B0%9C%EB%85%90" id="markdown-toc-https-개념">HTTPS 개념</a></li>
+  <li><a href="https://goodgid.github.io/HTTPS-Used-In-Practice/#%ED%95%A0-%ED%95%84%EC%9A%94-%EC%97%86%EB%8A%94-%EA%B1%B0-%EC%95%84%EB%8B%88%EC%95%BC-" id="markdown-toc-할-필요-없는-거-아니야-">할 필요 없는 거 아니야 ?</a></li>
+  <li><a href="https://goodgid.github.io/HTTPS-Used-In-Practice/#%EA%B7%B8%EB%9E%98%EC%84%9C-%EC%95%94%ED%98%B8%ED%99%94%EB%A5%BC-%ED%95%B4%EC%95%BC-%ED%95%9C%EB%8B%A4%EB%8A%94-%EA%B1%B0%EC%95%BC-" id="markdown-toc-그래서-암호화를-해야-한다는-거야-">그래서 암호화를 해야 한다는 거야 ?</a></li>
+  <li><a href="https://goodgid.github.io/HTTPS-Used-In-Practice/#summary" id="markdown-toc-summary">Summary</a></li>
+  <li><a href="https://goodgid.github.io/HTTPS-Used-In-Practice/#reference" id="markdown-toc-reference">Reference</a></li>
+</ul>
+
+<h2 id="prologue">Prologue</h2>
+
+<ul>
+  <li>
+    <p>다음과 같은 질문을 받았다.</p>
+  </li>
+  <li>
+    <p><em>Q. HTTPS를 사용하면 클라가 데이터를 암호화해서 전달할 필요가 있나?</em></p>
+  </li>
+  <li>
+    <p>위 질문에 대해 고민을 해보고 깨달은 바가 있어서 글을 작성하게 되었다.</p>
+  </li>
+  <li>
+    <p>우선 이 질문에 대한 답은 없다.</p>
+
+    <p>다만 답이 될 수 있는 후보 중에 하나에 대해 글을 작성하고자 한다.</p>
+  </li>
+</ul>
+
+<hr>
+
+<h2 id="https-개념">HTTPS 개념</h2>
+
+<ul>
+  <li>
+    <p>HTTPS를 사용하면 모든 HTTP 요청과 응답 데이터는 네트워크로 보내지기 전에 암호화된다.</p>
+  </li>
+  <li>
+    <p>HTTPS는 HTTP의 아래 계층인 <strong>보안 계층</strong>에서 동작한다.</p>
+  </li>
+  <li>
+    <p>이 보안 계층은 안전 소켓 계층(Secure Sockets Layer, <strong>SSL</strong>) 혹은</p>
+
+    <p>그를 계승한 전송 계층 보안(Transport Layer Security, <strong>TLS</strong>)을 이용하여 구현된다.</p>
+  </li>
+</ul>
+
+<p><img src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/HTTPS-Used-In-Practice_1.png" alt=""></p>
+
+<hr>
+
+<h2 id="할-필요-없는-거-아니야-">할 필요 없는 거 아니야 ?</h2>
+
+<ul>
+  <li>
+    <p>사실 보안 계층에서 암호화를 해주니까</p>
+
+    <p>클라가 굳이 암호화를 해서 보낼 필요가 없지 않을까?라고 생각했다.</p>
+  </li>
+  <li>
+    <p>그런데 다른 사람의 의견이 듣고 싶어서</p>
+
+    <p>팀에서 Infra를 담당하시는 팀원분(= H)에게 똑같은 질문을 여쭤봤다.</p>
+
+    <p>팀원분의 대답은 나와는 깊이의 차이가 느껴졌다.</p>
+  </li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>H : 
+HTTPS 통신은 
+어플리케이션 계층(=HTTP 계층)에서 암호화가 풀리기 때문에 
+예를 들어 Client -&gt; Nginx(SSL Termination) -&gt; WAS
+이렇게 가는 경로가 있다면 Nginx에서 암호화가 풀려버려요.
+그 말은 Nginx -&gt; WAS 구간은 안전하지 않다를 의미해요.
+즉 HTTPS는 SSL Handshake 구간에서만 적용되는 암호화라고 생각해야 해요.
+
+goodGid :
+그러면 만약 
+Client -&gt; WAS로 요청이 이뤄지고
+SSL Handshake가 형성되었다면 
+Client가 굳이 암호화해서 보낼 필요가 없다고 볼 수도 있겠네요?
+
+H :
+네.
+
+goodGid : 
+아하 Client -&gt; Nginx 대해서만 
+SSL Handshake가 형성되었기 때문에 
+Nginx -&gt; WAS 구간은 보안을 장담 못 한다.
+라고 이해하면 될까요?
+
+H :
+네. 그래서 요즘에는 SSL 처리하는 부분을 WAS 앞단에 두는 게 일반적이에요.
+ex) Client -&gt; SSL 처리 모듈(ex g/w, loadbalacer 등등) -&gt; WAS 구조
+왜냐하면 SSL 처리하는 게 CPU 리소스도 많이 먹기도 하고 별도의 관리도 필요하거든요.
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>필자는 단편적으로 클라이언트의 요청이 서버로 간다고 생각했다.</p>
+  </li>
+  <li>
+    <p>하지만 팀원분은 좀 더 거시적으로 상황을 가정하고 답변을 주셨다.</p>
+  </li>
+</ul>
+
+<hr>
+
+<h2 id="그래서-암호화를-해야-한다는-거야-">그래서 암호화를 해야 한다는 거야 ?</h2>
+
+<ul>
+  <li>
+    <p>상황에 따라 다르다고 대답할 수 있겠다.</p>
+  </li>
+  <li>
+    <p>요즘에는 하나의 요청이 여러 곳을 거쳐서 도착한다.</p>
+  </li>
+  <li>
+    <p>그 관점에서 생각한다면 암호화는 언제 어디서 어떻게 노출될지 모른다.</p>
+  </li>
+  <li>
+    <p>그러므로 100% 장담을 할 수 없다면 암호화를 하는 게 맞다고 생각한다.</p>
+  </li>
+  <li>
+    <p>왜냐하면 다음과 같은 상황이라면 데이터가 노출되기 때문이다.</p>
+  </li>
+</ul>
+
+<p><img src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/HTTPS-Used-In-Practice_2.png" alt=""></p>
+
+<hr>
+
+<h2 id="summary">Summary</h2>
+
+<ul>
+  <li>
+    <p><em>Q. HTTPS를 사용하면 클라가 데이터를 암호화해서 전달할 필요가 있나?</em></p>
+  </li>
+  <li>
+    <p>굉장히 많은 생각과 흥미로움을 불러일으킨 질문이었다.</p>
+  </li>
+  <li>
+    <p>다시 한 번 HTTPS에 관해 공부도 하게 되었고</p>
+
+    <p>네트워크라는 게 정말 복잡하고 고려해야 할 변수가 너무나도 많구나를 깨닫게 해주었다.</p>
+
+    <p>그리고 무엇보다 HTTPS 사용하는 데 있어 숙련도가 한층 높아진 느낌이다. ㅎㅎ</p>
+  </li>
+</ul>
+
+<p>+</p>
+
+<ul>
+  <li>
+    <p>위 질문에 대해 다양한 의견을 듣고 싶다.</p>
+
+    <p>가능하다면 댓글로 의견을 공유해줬으면 좋겠다 !</p>
+  </li>
+</ul>
+
+<hr>
+
+<h2 id="reference">Reference</h2>
+
+<ul>
+  <li><a href="http://www.ktword.co.kr/abbr_view.php?m_temp1=3132" target="_blank">HTTPS   Secure Hypertext Transfer Protocol   HTTP 보안계층 구현</a></li>
+</ul>
+
+        </article>
+        
+        <hr>
+
+        
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+        
+
+        
+
+
+    </div>
+
+    <div class="right">
+        <div class="wrap" style="width: 193px;">
+            <!-- Content -->
+            <div class="side content">
+                <div>
+                    Index
+                </div>
+                <ul id="content-side" class="content-ul" style="max-height: 797px;">
+  <li><a href="https://goodgid.github.io/HTTPS-Used-In-Practice/#prologue" id="markdown-toc-prologue" data-scroll="">Prologue</a></li>
+  <li><a href="https://goodgid.github.io/HTTPS-Used-In-Practice/#https-%EA%B0%9C%EB%85%90" id="markdown-toc-https-개념" data-scroll="">HTTPS 개념</a></li>
+  <li><a href="https://goodgid.github.io/HTTPS-Used-In-Practice/#%ED%95%A0-%ED%95%84%EC%9A%94-%EC%97%86%EB%8A%94-%EA%B1%B0-%EC%95%84%EB%8B%88%EC%95%BC-" id="markdown-toc-할-필요-없는-거-아니야-" data-scroll="">할 필요 없는 거 아니야 ?</a></li>
+  <li><a href="https://goodgid.github.io/HTTPS-Used-In-Practice/#%EA%B7%B8%EB%9E%98%EC%84%9C-%EC%95%94%ED%98%B8%ED%99%94%EB%A5%BC-%ED%95%B4%EC%95%BC-%ED%95%9C%EB%8B%A4%EB%8A%94-%EA%B1%B0%EC%95%BC-" id="markdown-toc-그래서-암호화를-해야-한다는-거야-" data-scroll="">그래서 암호화를 해야 한다는 거야 ?</a></li>
+  <li><a href="https://goodgid.github.io/HTTPS-Used-In-Practice/#summary" id="markdown-toc-summary" data-scroll="">Summary</a></li>
+  <li><a href="https://goodgid.github.io/HTTPS-Used-In-Practice/#reference" id="markdown-toc-reference" data-scroll="">Reference</a></li>
+
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * target _blank
+ */
+(function() {
+    var aTags = document.querySelectorAll('article a:not([id])')
+    for (var i = 0; i < aTags.length; i++) {
+        aTags[i].setAttribute('target', '_blank')
+    }
+}());
+</script>
+<script src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/pageContent.js" charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+
+    <div class="wrapper">
+        <p class="description">
+              
+        </p>
+        <p class="contact">
+            Contact me at: 
+            
+            
+            <a href="https://github.com/goodGid" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>  
+
+            
+            <a href="https://www.linkedin.com/in/kiyong-shin-a498a2142" title="LinkedIn"><i class="fa fa-linkedin" aria-hidden="true"></i></a>  
+
+            
+            <a href="https://www.facebook.com/hello.goodGid" title="Facebook"><i class="fa fa-facebook-official" aria-hidden="true"></i></a>   
+
+            
+            <a href="https://www.instagram.com/hello.goodGid" title="Instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a>   
+            
+            
+
+             
+            
+        </p>
+        
+        <p class="power">
+            <span>
+                Site powered by <a href="https://jekyllrb.com/">Jekyll</a> &amp; <a href="https://pages.github.com/">Github Pages</a>. Theme designed by <a href="https://github.com/gaohaoyang">HyG</a>.
+            </span>
+        </p>
+    </div>
+
+</footer>
+
+
+    <div class="back-to-top">
+    <a href="https://goodgid.github.io/HTTPS-Used-In-Practice/#top" data-scroll="">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+    <script src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/main.js" charset="utf-8"></script>
+    <script src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/smooth-scroll.min.js" charset="utf-8"></script>
+    <script type="text/javascript">
+      smoothScroll.init({
+        speed: 500, // Integer. How fast to complete the scroll in milliseconds
+        easing: 'easeInOutCubic', // Easing pattern to use
+        offset: 20, // Integer. How far to offset the scrolling anchor location in pixels
+      });
+    </script>
+    <!-- <script src=" /js/scroll.min.js " charset="utf-8"></script> -->
+
+    <!-- Go to www.addthis.com/dashboard to customize your tools -->
+    <script type="text/javascript" src="https://s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5d8971d02b039c1e"></script>
+
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/5e932e2969e9320caac2d415/default';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+    <!--End of Tawk.to Script-->
+        
+  
+
+
+<ins class="adsbygoogle adsbygoogle-noablate" data-adsbygoogle-status="done" style="display: none !important;" data-ad-status="unfilled"><div id="aswift_0_host" style="border: none; height: 0px; width: 0px; margin: 0px; padding: 0px; position: relative; visibility: visible; background-color: transparent; display: inline-block;"><iframe id="aswift_0" name="aswift_0" browsingtopics="true" style="left:0;position:absolute;top:0;border:0;width:undefinedpx;height:undefinedpx;min-height:auto;max-height:none;min-width:auto;max-width:none;" sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allow="attribution-reporting; run-ad-auction" src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/ads.html" data-google-container-id="a!1" tabindex="0" title="Advertisement" aria-label="Advertisement" data-load-complete="true"></iframe></div></ins><iframe name="googlefcPresent" style="display: none; width: 0px; height: 0px; border: none; z-index: -1000; left: -1000px; top: -1000px;" src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/saved_resource.html"></iframe><div id="google-anno-sa" dir="ltr" tabindex="0" style="color-scheme: initial !important; forced-color-adjust: initial !important; mask: initial !important; math-depth: initial !important; position: fixed !important; position-anchor: initial !important; text-size-adjust: initial !important; appearance: initial !important; color: initial !important; font: initial !important; font-palette: initial !important; font-synthesis: initial !important; position-area: initial !important; text-orientation: initial !important; text-rendering: initial !important; text-spacing-trim: initial !important; -webkit-font-smoothing: initial !important; -webkit-locale: initial !important; -webkit-text-orientation: initial !important; -webkit-writing-mode: initial !important; writing-mode: initial !important; zoom: initial !important; accent-color: initial !important; place-content: initial !important; place-items: initial !important; place-self: initial !important; alignment-baseline: initial !important; anchor-name: initial !important; anchor-scope: initial !important; animation-composition: initial !important; animation: initial !important; app-region: initial !important; aspect-ratio: initial !important; backdrop-filter: initial !important; backface-visibility: initial !important; background: rgb(255, 255, 255) !important; background-blend-mode: initial !important; baseline-shift: initial !important; baseline-source: initial !important; block-size: initial !important; border-block: initial !important; border: 0px !important; border-radius: 16px !important; border-collapse: initial !important; border-end-end-radius: initial !important; border-end-start-radius: initial !important; border-inline: initial !important; border-start-end-radius: initial !important; border-start-start-radius: initial !important; bottom: 91px !important; box-decoration-break: initial !important; box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 2px, rgba(0, 0, 0, 0.15) 0px 1px 3px 1px !important; box-sizing: initial !important; break-after: initial !important; break-before: initial !important; break-inside: initial !important; buffered-rendering: initial !important; caption-side: initial !important; caret-color: initial !important; clear: initial !important; clip: initial !important; clip-path: initial !important; clip-rule: initial !important; color-interpolation: initial !important; color-interpolation-filters: initial !important; color-rendering: initial !important; columns: initial !important; column-fill: initial !important; gap: initial !important; column-rule: initial !important; column-span: initial !important; contain: initial !important; contain-intrinsic-block-size: initial !important; contain-intrinsic-size: initial !important; contain-intrinsic-inline-size: initial !important; container: initial !important; content: initial !important; content-visibility: initial !important; counter-increment: initial !important; counter-reset: initial !important; counter-set: initial !important; cursor: initial !important; cx: initial !important; cy: initial !important; d: initial !important; display: initial !important; dominant-baseline: initial !important; dynamic-range-limit: initial !important; empty-cells: initial !important; field-sizing: initial !important; fill: white !important; fill-opacity: initial !important; fill-rule: initial !important; filter: initial !important; flex: initial !important; flex-flow: initial !important; float: initial !important; flood-color: initial !important; flood-opacity: initial !important; grid: initial !important; grid-area: initial !important; height: 50px !important; hyphenate-character: initial !important; hyphenate-limit-chars: initial !important; hyphens: initial !important; image-orientation: initial !important; image-rendering: initial !important; initial-letter: initial !important; inline-size: initial !important; inset-block: initial !important; inset-inline: initial !important; interpolate-size: initial !important; isolation: initial !important; left: 630.25px !important; letter-spacing: initial !important; lighting-color: initial !important; line-break: initial !important; list-style: initial !important; margin-block: initial !important; margin: initial !important; margin-inline: initial !important; marker: initial !important; mask-type: initial !important; math-shift: initial !important; math-style: initial !important; max-block-size: initial !important; max-height: initial !important; max-inline-size: initial !important; max-width: initial !important; min-block-size: initial !important; min-height: initial !important; min-inline-size: initial !important; min-width: initial !important; mix-blend-mode: initial !important; object-fit: initial !important; object-position: initial !important; object-view-box: initial !important; offset: initial !important; opacity: initial !important; order: initial !important; orphans: initial !important; outline: initial !important; outline-offset: initial !important; overflow-anchor: initial !important; overflow-block: initial !important; overflow-clip-margin: initial !important; overflow-inline: initial !important; overflow-wrap: initial !important; overflow: initial !important; overlay: initial !important; overscroll-behavior-block: initial !important; overscroll-behavior-inline: initial !important; overscroll-behavior: initial !important; padding-block: initial !important; padding: initial !important; padding-inline: initial !important; page: initial !important; page-orientation: initial !important; paint-order: initial !important; perspective: initial !important; perspective-origin: initial !important; pointer-events: initial !important; position-try: initial !important; position-visibility: initial !important; print-color-adjust: initial !important; quotes: initial !important; r: initial !important; reading-flow: initial !important; reading-order: initial !important; resize: initial !important; right: 16px !important; rotate: initial !important; ruby-align: initial !important; ruby-position: initial !important; rx: initial !important; ry: initial !important; scale: initial !important; scroll-behavior: initial !important; scroll-initial-target: initial !important; scroll-margin-block: initial !important; scroll-margin: initial !important; scroll-margin-inline: initial !important; scroll-marker-group: initial !important; scroll-padding-block: initial !important; scroll-padding: initial !important; scroll-padding-inline: initial !important; scroll-snap-align: initial !important; scroll-snap-stop: initial !important; scroll-snap-type: initial !important; scroll-timeline: initial !important; scrollbar-color: initial !important; scrollbar-gutter: initial !important; scrollbar-width: initial !important; shape-image-threshold: initial !important; shape-margin: initial !important; shape-outside: initial !important; shape-rendering: initial !important; size: initial !important; speak: initial !important; stop-color: initial !important; stop-opacity: initial !important; stroke: initial !important; stroke-dasharray: initial !important; stroke-dashoffset: initial !important; stroke-linecap: initial !important; stroke-linejoin: initial !important; stroke-miterlimit: initial !important; stroke-opacity: initial !important; stroke-width: initial !important; tab-size: initial !important; table-layout: initial !important; text-align: center !important; text-align-last: initial !important; text-anchor: initial !important; text-box: initial !important; text-combine-upright: initial !important; text-decoration: initial !important; text-decoration-skip-ink: initial !important; text-emphasis: initial !important; text-emphasis-position: initial !important; text-indent: initial !important; text-overflow: initial !important; text-shadow: initial !important; text-transform: initial !important; text-underline-offset: initial !important; text-underline-position: initial !important; text-wrap: initial !important; timeline-scope: initial !important; top: initial !important; touch-action: initial !important; transform: initial !important; transform-box: initial !important; transform-origin: initial !important; transform-style: initial !important; transition: initial !important; translate: initial !important; user-select: initial !important; vector-effect: initial !important; vertical-align: initial !important; view-timeline: initial !important; view-transition-class: initial !important; view-transition-name: initial !important; visibility: initial !important; border-spacing: initial !important; -webkit-box-align: initial !important; -webkit-box-decoration-break: initial !important; -webkit-box-direction: initial !important; -webkit-box-flex: initial !important; -webkit-box-ordinal-group: initial !important; -webkit-box-orient: initial !important; -webkit-box-pack: initial !important; -webkit-box-reflect: initial !important; -webkit-line-break: initial !important; -webkit-line-clamp: initial !important; -webkit-mask-box-image: initial !important; -webkit-rtl-ordering: initial !important; -webkit-ruby-position: initial !important; -webkit-tap-highlight-color: initial !important; -webkit-text-combine: initial !important; -webkit-text-decorations-in-effect: initial !important; -webkit-text-fill-color: unset !important; -webkit-text-security: initial !important; -webkit-text-stroke: initial !important; -webkit-user-drag: initial !important; white-space-collapse: initial !important; widows: initial !important; width: initial !important; will-change: initial !important; word-break: initial !important; word-spacing: initial !important; x: initial !important; y: initial !important; z-index: 1000 !important;"><span data-google-vignette="false" data-google-interstitial="false" style="color-scheme: initial !important; forced-color-adjust: initial !important; mask: initial !important; math-depth: initial !important; position: absolute !important; position-anchor: initial !important; text-size-adjust: initial !important; appearance: initial !important; color: rgb(26, 115, 232) !important; font: initial !important; font-palette: initial !important; font-synthesis: initial !important; position-area: initial !important; text-orientation: initial !important; text-rendering: initial !important; text-spacing-trim: initial !important; -webkit-font-smoothing: initial !important; -webkit-locale: initial !important; -webkit-text-orientation: initial !important; -webkit-writing-mode: initial !important; writing-mode: initial !important; zoom: initial !important; accent-color: initial !important; place-content: initial !important; place-items: initial !important; place-self: initial !important; alignment-baseline: initial !important; anchor-name: initial !important; anchor-scope: initial !important; animation-composition: initial !important; animation: initial !important; app-region: initial !important; aspect-ratio: initial !important; backdrop-filter: initial !important; backface-visibility: initial !important; background: initial !important; background-blend-mode: initial !important; baseline-shift: initial !important; baseline-source: initial !important; block-size: initial !important; border-block: initial !important; border: 0px !important; border-radius: initial !important; border-collapse: initial !important; border-end-end-radius: initial !important; border-end-start-radius: initial !important; border-inline: initial !important; border-start-end-radius: initial !important; border-start-start-radius: initial !important; inset: 2.5px 12px 2.5px 50px !important; box-decoration-break: initial !important; box-shadow: none !important; box-sizing: initial !important; break-after: initial !important; break-before: initial !important; break-inside: initial !important; buffered-rendering: initial !important; caption-side: initial !important; caret-color: initial !important; clear: initial !important; clip: initial !important; clip-path: initial !important; clip-rule: initial !important; color-interpolation: initial !important; color-interpolation-filters: initial !important; color-rendering: initial !important; columns: initial !important; column-fill: initial !important; gap: initial !important; column-rule: initial !important; column-span: initial !important; contain: initial !important; contain-intrinsic-block-size: initial !important; contain-intrinsic-size: initial !important; contain-intrinsic-inline-size: initial !important; container: initial !important; content: initial !important; content-visibility: initial !important; counter-increment: initial !important; counter-reset: initial !important; counter-set: initial !important; cursor: pointer !important; cx: initial !important; cy: initial !important; d: initial !important; display: flex !important; dominant-baseline: initial !important; dynamic-range-limit: initial !important; empty-cells: initial !important; field-sizing: initial !important; fill: initial !important; fill-opacity: initial !important; fill-rule: initial !important; filter: initial !important; flex: initial !important; flex-direction: row !important; flex-wrap: initial !important; float: none !important; flood-color: initial !important; flood-opacity: initial !important; grid: initial !important; grid-area: initial !important; height: initial !important; hyphenate-character: initial !important; hyphenate-limit-chars: initial !important; hyphens: initial !important; image-orientation: initial !important; image-rendering: initial !important; initial-letter: initial !important; inline-size: initial !important; inset-block: initial !important; inset-inline: initial !important; interpolate-size: initial !important; isolation: initial !important; letter-spacing: initial !important; lighting-color: initial !important; line-break: initial !important; list-style: initial !important; margin-block: initial !important; margin: 0px !important; margin-inline: initial !important; marker: initial !important; mask-type: initial !important; math-shift: initial !important; math-style: initial !important; max-block-size: initial !important; max-height: initial !important; max-inline-size: initial !important; max-width: initial !important; min-block-size: initial !important; min-height: initial !important; min-inline-size: initial !important; min-width: initial !important; mix-blend-mode: initial !important; object-fit: initial !important; object-position: initial !important; object-view-box: initial !important; offset: initial !important; opacity: initial !important; order: initial !important; orphans: initial !important; outline: 0px !important; outline-offset: initial !important; overflow-anchor: initial !important; overflow-block: initial !important; overflow-clip-margin: initial !important; overflow-inline: initial !important; overflow-wrap: initial !important; overflow: initial !important; overlay: initial !important; overscroll-behavior-block: initial !important; overscroll-behavior-inline: initial !important; overscroll-behavior: initial !important; padding-block: initial !important; padding: 0px !important; padding-inline: initial !important; page: initial !important; page-orientation: initial !important; paint-order: initial !important; perspective: initial !important; perspective-origin: initial !important; pointer-events: initial !important; position-try: initial !important; position-visibility: initial !important; print-color-adjust: initial !important; quotes: initial !important; r: initial !important; reading-flow: initial !important; reading-order: initial !important; resize: initial !important; rotate: initial !important; ruby-align: initial !important; ruby-position: initial !important; rx: initial !important; ry: initial !important; scale: initial !important; scroll-behavior: initial !important; scroll-initial-target: initial !important; scroll-margin-block: initial !important; scroll-margin: initial !important; scroll-margin-inline: initial !important; scroll-marker-group: initial !important; scroll-padding-block: initial !important; scroll-padding: initial !important; scroll-padding-inline: initial !important; scroll-snap-align: initial !important; scroll-snap-stop: initial !important; scroll-snap-type: initial !important; scroll-timeline: initial !important; scrollbar-color: initial !important; scrollbar-gutter: initial !important; scrollbar-width: initial !important; shape-image-threshold: initial !important; shape-margin: initial !important; shape-outside: initial !important; shape-rendering: initial !important; size: initial !important; speak: initial !important; stop-color: initial !important; stop-opacity: initial !important; stroke: initial !important; stroke-dasharray: initial !important; stroke-dashoffset: initial !important; stroke-linecap: initial !important; stroke-linejoin: initial !important; stroke-miterlimit: initial !important; stroke-opacity: initial !important; stroke-width: initial !important; tab-size: initial !important; table-layout: initial !important; text-align: initial !important; text-align-last: initial !important; text-anchor: initial !important; text-box: initial !important; text-combine-upright: initial !important; text-decoration: initial !important; text-decoration-skip-ink: initial !important; text-emphasis: initial !important; text-emphasis-position: initial !important; text-indent: initial !important; text-overflow: initial !important; text-shadow: initial !important; text-transform: initial !important; text-underline-offset: initial !important; text-underline-position: initial !important; text-wrap: initial !important; timeline-scope: initial !important; touch-action: initial !important; transform: initial !important; transform-box: initial !important; transform-origin: initial !important; transform-style: initial !important; transition: width 5s !important; translate: initial !important; user-select: initial !important; vector-effect: initial !important; vertical-align: initial !important; view-timeline: initial !important; view-transition-class: initial !important; view-transition-name: initial !important; visibility: initial !important; border-spacing: initial !important; -webkit-box-align: initial !important; -webkit-box-decoration-break: initial !important; -webkit-box-direction: initial !important; -webkit-box-flex: initial !important; -webkit-box-ordinal-group: initial !important; -webkit-box-orient: initial !important; -webkit-box-pack: initial !important; -webkit-box-reflect: initial !important; -webkit-line-break: initial !important; -webkit-line-clamp: initial !important; -webkit-mask-box-image: initial !important; -webkit-rtl-ordering: initial !important; -webkit-ruby-position: initial !important; -webkit-tap-highlight-color: initial !important; -webkit-text-combine: initial !important; -webkit-text-decorations-in-effect: initial !important; -webkit-text-fill-color: unset !important; -webkit-text-security: initial !important; -webkit-text-stroke: initial !important; -webkit-user-drag: initial !important; white-space-collapse: initial !important; widows: initial !important; width: initial !important; will-change: initial !important; word-break: initial !important; word-spacing: initial !important; x: initial !important; y: initial !important; z-index: initial !important;"><span style="display: inline-block !important; cursor: inherit !important; margin-left: 4px !important; margin-right: 6px !important; margin-top: 12px !important;"><svg viewBox="0 -960 960 960" width="20px" height="20px" class="google-anno-sa-intent-icon" style="color-scheme: initial !important; forced-color-adjust: initial !important; mask: initial !important; math-depth: initial !important; position: initial !important; position-anchor: initial !important; text-size-adjust: initial !important; appearance: initial !important; color: initial !important; font: initial !important; font-palette: initial !important; font-synthesis: initial !important; position-area: initial !important; text-orientation: initial !important; text-rendering: initial !important; text-spacing-trim: initial !important; -webkit-font-smoothing: initial !important; -webkit-locale: initial !important; -webkit-text-orientation: initial !important; -webkit-writing-mode: initial !important; writing-mode: initial !important; zoom: initial !important; accent-color: initial !important; place-content: initial !important; place-items: initial !important; place-self: initial !important; alignment-baseline: initial !important; anchor-name: initial !important; anchor-scope: initial !important; animation-composition: initial !important; animation: initial !important; app-region: initial !important; aspect-ratio: initial !important; backdrop-filter: initial !important; backface-visibility: initial !important; background: initial !important; background-blend-mode: initial !important; baseline-shift: initial !important; baseline-source: initial !important; block-size: initial !important; border-block: initial !important; border: 0px !important; border-radius: initial !important; border-collapse: initial !important; border-end-end-radius: initial !important; border-end-start-radius: initial !important; border-inline: initial !important; border-start-end-radius: initial !important; border-start-start-radius: initial !important; inset: initial !important; box-decoration-break: initial !important; box-shadow: none !important; box-sizing: initial !important; break-after: initial !important; break-before: initial !important; break-inside: initial !important; buffered-rendering: initial !important; caption-side: initial !important; caret-color: initial !important; clear: initial !important; clip: initial !important; clip-path: initial !important; clip-rule: initial !important; color-interpolation: initial !important; color-interpolation-filters: initial !important; color-rendering: initial !important; columns: initial !important; column-fill: initial !important; gap: initial !important; column-rule: initial !important; column-span: initial !important; contain: initial !important; contain-intrinsic-block-size: initial !important; contain-intrinsic-size: initial !important; contain-intrinsic-inline-size: initial !important; container: initial !important; content: initial !important; content-visibility: initial !important; counter-increment: initial !important; counter-reset: initial !important; counter-set: initial !important; cursor: inherit !important; cx: initial !important; cy: initial !important; d: initial !important; display: inline !important; dominant-baseline: initial !important; dynamic-range-limit: initial !important; empty-cells: initial !important; field-sizing: initial !important; fill: rgb(26, 115, 232) !important; fill-opacity: initial !important; fill-rule: initial !important; filter: initial !important; flex: initial !important; flex-flow: initial !important; float: none !important; flood-color: initial !important; flood-opacity: initial !important; grid: initial !important; grid-area: initial !important; height: initial !important; hyphenate-character: initial !important; hyphenate-limit-chars: initial !important; hyphens: initial !important; image-orientation: initial !important; image-rendering: initial !important; initial-letter: initial !important; inline-size: initial !important; inset-block: initial !important; inset-inline: initial !important; interpolate-size: initial !important; isolation: initial !important; letter-spacing: initial !important; lighting-color: initial !important; line-break: initial !important; list-style: initial !important; margin-block: initial !important; margin: 0px !important; margin-inline: initial !important; marker: initial !important; mask-type: initial !important; math-shift: initial !important; math-style: initial !important; max-block-size: initial !important; max-height: initial !important; max-inline-size: initial !important; max-width: initial !important; min-block-size: initial !important; min-height: initial !important; min-inline-size: initial !important; min-width: initial !important; mix-blend-mode: initial !important; object-fit: initial !important; object-position: initial !important; object-view-box: initial !important; offset: initial !important; opacity: initial !important; order: initial !important; orphans: initial !important; outline: 0px !important; outline-offset: initial !important; overflow-anchor: initial !important; overflow-block: initial !important; overflow-clip-margin: initial !important; overflow-inline: initial !important; overflow-wrap: initial !important; overflow: initial !important; overlay: initial !important; overscroll-behavior-block: initial !important; overscroll-behavior-inline: initial !important; overscroll-behavior: initial !important; padding-block: initial !important; padding: 0px !important; padding-inline: initial !important; page: initial !important; page-orientation: initial !important; paint-order: initial !important; perspective: initial !important; perspective-origin: initial !important; pointer-events: initial !important; position-try: initial !important; position-visibility: initial !important; print-color-adjust: initial !important; quotes: initial !important; r: initial !important; reading-flow: initial !important; reading-order: initial !important; resize: initial !important; rotate: initial !important; ruby-align: initial !important; ruby-position: initial !important; rx: initial !important; ry: initial !important; scale: initial !important; scroll-behavior: initial !important; scroll-initial-target: initial !important; scroll-margin-block: initial !important; scroll-margin: initial !important; scroll-margin-inline: initial !important; scroll-marker-group: initial !important; scroll-padding-block: initial !important; scroll-padding: initial !important; scroll-padding-inline: initial !important; scroll-snap-align: initial !important; scroll-snap-stop: initial !important; scroll-snap-type: initial !important; scroll-timeline: initial !important; scrollbar-color: initial !important; scrollbar-gutter: initial !important; scrollbar-width: initial !important; shape-image-threshold: initial !important; shape-margin: initial !important; shape-outside: initial !important; shape-rendering: initial !important; size: initial !important; speak: initial !important; stop-color: initial !important; stop-opacity: initial !important; stroke: initial !important; stroke-dasharray: initial !important; stroke-dashoffset: initial !important; stroke-linecap: initial !important; stroke-linejoin: initial !important; stroke-miterlimit: initial !important; stroke-opacity: initial !important; stroke-width: initial !important; tab-size: initial !important; table-layout: initial !important; text-align: initial !important; text-align-last: initial !important; text-anchor: initial !important; text-box: initial !important; text-combine-upright: initial !important; text-decoration: initial !important; text-decoration-skip-ink: initial !important; text-emphasis: initial !important; text-emphasis-position: initial !important; text-indent: initial !important; text-overflow: initial !important; text-shadow: initial !important; text-transform: initial !important; text-underline-offset: initial !important; text-underline-position: initial !important; text-wrap: initial !important; timeline-scope: initial !important; touch-action: initial !important; transform: initial !important; transform-box: initial !important; transform-origin: initial !important; transform-style: initial !important; transition: initial !important; translate: initial !important; user-select: initial !important; vector-effect: initial !important; vertical-align: initial !important; view-timeline: initial !important; view-transition-class: initial !important; view-transition-name: initial !important; visibility: initial !important; border-spacing: initial !important; -webkit-box-align: initial !important; -webkit-box-decoration-break: initial !important; -webkit-box-direction: initial !important; -webkit-box-flex: initial !important; -webkit-box-ordinal-group: initial !important; -webkit-box-orient: initial !important; -webkit-box-pack: initial !important; -webkit-box-reflect: initial !important; -webkit-line-break: initial !important; -webkit-line-clamp: initial !important; -webkit-mask-box-image: initial !important; -webkit-rtl-ordering: initial !important; -webkit-ruby-position: initial !important; -webkit-tap-highlight-color: initial !important; -webkit-text-combine: initial !important; -webkit-text-decorations-in-effect: initial !important; -webkit-text-fill-color: unset !important; -webkit-text-security: initial !important; -webkit-text-stroke: initial !important; -webkit-user-drag: initial !important; white-space-collapse: initial !important; widows: initial !important; width: initial !important; will-change: initial !important; word-break: initial !important; word-spacing: initial !important; x: initial !important; y: initial !important; z-index: initial !important;"><path d="m456-200 174-340H510v-220L330-420h126v220Zm24 120q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"></path></svg></span><span class="google-anno-sa-qtx google-anno-skip" tabindex="0" role="link" aria-live="polite" aria-label="dig 쇼핑 옵션으로 이동" style="color-scheme: initial !important; forced-color-adjust: initial !important; mask: initial !important; math-depth: initial !important; position: initial !important; position-anchor: initial !important; text-size-adjust: initial !important; appearance: initial !important; color: rgb(26, 115, 232) !important; font-family: Roboto !important; font-feature-settings: initial !important; font-kerning: initial !important; font-optical-sizing: initial !important; font-palette: initial !important; font-size: 16px !important; font-size-adjust: initial !important; font-stretch: initial !important; font-style: normal !important; font-synthesis: initial !important; font-variant: initial !important; font-variation-settings: initial !important; font-weight: 400 !important; position-area: initial !important; text-orientation: initial !important; text-rendering: initial !important; text-spacing-trim: initial !important; -webkit-font-smoothing: initial !important; -webkit-locale: initial !important; -webkit-text-orientation: initial !important; -webkit-writing-mode: initial !important; writing-mode: initial !important; zoom: initial !important; accent-color: initial !important; place-content: initial !important; align-items: center !important; place-self: initial !important; alignment-baseline: initial !important; anchor-name: initial !important; anchor-scope: initial !important; animation-composition: initial !important; animation: initial !important; app-region: initial !important; aspect-ratio: initial !important; backdrop-filter: initial !important; backface-visibility: initial !important; background: initial !important; background-blend-mode: initial !important; baseline-shift: initial !important; baseline-source: initial !important; block-size: initial !important; border-block: initial !important; border: initial !important; border-radius: initial !important; border-collapse: initial !important; border-end-end-radius: initial !important; border-end-start-radius: initial !important; border-inline: initial !important; border-start-end-radius: initial !important; border-start-start-radius: initial !important; inset: initial !important; box-decoration-break: initial !important; box-shadow: initial !important; box-sizing: initial !important; break-after: initial !important; break-before: initial !important; break-inside: initial !important; buffered-rendering: initial !important; caption-side: initial !important; caret-color: initial !important; clear: initial !important; clip: initial !important; clip-path: initial !important; clip-rule: initial !important; color-interpolation: initial !important; color-interpolation-filters: initial !important; color-rendering: initial !important; columns: initial !important; column-fill: initial !important; gap: initial !important; column-rule: initial !important; column-span: initial !important; contain: initial !important; contain-intrinsic-block-size: initial !important; contain-intrinsic-size: initial !important; contain-intrinsic-inline-size: initial !important; container: initial !important; content: initial !important; content-visibility: initial !important; counter-increment: initial !important; counter-reset: initial !important; counter-set: initial !important; cursor: inherit !important; cx: initial !important; cy: initial !important; d: initial !important; display: initial !important; dominant-baseline: initial !important; dynamic-range-limit: initial !important; empty-cells: initial !important; field-sizing: initial !important; fill: initial !important; fill-opacity: initial !important; fill-rule: initial !important; filter: initial !important; flex: initial !important; flex-flow: initial !important; float: initial !important; flood-color: initial !important; flood-opacity: initial !important; grid: initial !important; grid-area: initial !important; height: 40px !important; hyphenate-character: initial !important; hyphenate-limit-chars: initial !important; hyphens: initial !important; image-orientation: initial !important; image-rendering: initial !important; initial-letter: initial !important; inline-size: initial !important; inset-block: initial !important; inset-inline: initial !important; interpolate-size: initial !important; isolation: initial !important; justify-items: initial !important; letter-spacing: initial !important; lighting-color: initial !important; line-break: initial !important; line-height: 44px !important; list-style: initial !important; margin-block: initial !important; margin: initial !important; margin-inline: initial !important; marker: initial !important; mask-type: initial !important; math-shift: initial !important; math-style: initial !important; max-block-size: initial !important; max-height: initial !important; max-inline-size: initial !important; max-width: initial !important; min-block-size: initial !important; min-height: initial !important; min-inline-size: initial !important; min-width: initial !important; mix-blend-mode: initial !important; object-fit: initial !important; object-position: initial !important; object-view-box: initial !important; offset: initial !important; opacity: initial !important; order: initial !important; orphans: initial !important; outline: initial !important; outline-offset: initial !important; overflow-anchor: initial !important; overflow-block: initial !important; overflow-clip-margin: initial !important; overflow-inline: initial !important; overflow-wrap: initial !important; overflow: hidden !important; overlay: initial !important; overscroll-behavior-block: initial !important; overscroll-behavior-inline: initial !important; overscroll-behavior: initial !important; padding-block: initial !important; padding: initial !important; padding-inline: initial !important; page: initial !important; page-orientation: initial !important; paint-order: initial !important; perspective: initial !important; perspective-origin: initial !important; pointer-events: initial !important; position-try: initial !important; position-visibility: initial !important; print-color-adjust: initial !important; quotes: initial !important; r: initial !important; reading-flow: initial !important; reading-order: initial !important; resize: initial !important; rotate: initial !important; ruby-align: initial !important; ruby-position: initial !important; rx: initial !important; ry: initial !important; scale: initial !important; scroll-behavior: initial !important; scroll-initial-target: initial !important; scroll-margin-block: initial !important; scroll-margin: initial !important; scroll-margin-inline: initial !important; scroll-marker-group: initial !important; scroll-padding-block: initial !important; scroll-padding: initial !important; scroll-padding-inline: initial !important; scroll-snap-align: initial !important; scroll-snap-stop: initial !important; scroll-snap-type: initial !important; scroll-timeline: initial !important; scrollbar-color: initial !important; scrollbar-gutter: initial !important; scrollbar-width: initial !important; shape-image-threshold: initial !important; shape-margin: initial !important; shape-outside: initial !important; shape-rendering: initial !important; size: initial !important; speak: initial !important; stop-color: initial !important; stop-opacity: initial !important; stroke: initial !important; stroke-dasharray: initial !important; stroke-dashoffset: initial !important; stroke-linecap: initial !important; stroke-linejoin: initial !important; stroke-miterlimit: initial !important; stroke-opacity: initial !important; stroke-width: initial !important; tab-size: initial !important; table-layout: initial !important; text-align: initial !important; text-align-last: initial !important; text-anchor: initial !important; text-box: initial !important; text-combine-upright: initial !important; text-decoration: initial !important; text-decoration-skip-ink: initial !important; text-emphasis: initial !important; text-emphasis-position: initial !important; text-indent: initial !important; text-overflow: ellipsis !important; text-shadow: initial !important; text-transform: initial !important; text-underline-offset: initial !important; text-underline-position: initial !important; text-wrap: nowrap !important; timeline-scope: initial !important; touch-action: initial !important; transform: initial !important; transform-box: initial !important; transform-origin: initial !important; transform-style: initial !important; transition: initial !important; translate: initial !important; user-select: initial !important; vector-effect: initial !important; vertical-align: initial !important; view-timeline: initial !important; view-transition-class: initial !important; view-transition-name: initial !important; visibility: initial !important; border-spacing: initial !important; -webkit-box-align: initial !important; -webkit-box-decoration-break: initial !important; -webkit-box-direction: initial !important; -webkit-box-flex: initial !important; -webkit-box-ordinal-group: initial !important; -webkit-box-orient: initial !important; -webkit-box-pack: initial !important; -webkit-box-reflect: initial !important; -webkit-line-break: initial !important; -webkit-line-clamp: initial !important; -webkit-mask-box-image: initial !important; -webkit-rtl-ordering: initial !important; -webkit-ruby-position: initial !important; -webkit-tap-highlight-color: transparent !important; -webkit-text-combine: initial !important; -webkit-text-decorations-in-effect: initial !important; -webkit-text-fill-color: unset !important; -webkit-text-security: initial !important; -webkit-text-stroke: initial !important; -webkit-user-drag: initial !important; white-space-collapse: collapse !important; widows: initial !important; width: initial !important; will-change: initial !important; word-break: initial !important; word-spacing: initial !important; x: initial !important; y: initial !important; z-index: initial !important;">dig</span></span><span id="gda" data-google-vignette="false" data-google-interstitial="false" style="color-scheme: initial !important; forced-color-adjust: initial !important; mask: initial !important; math-depth: initial !important; position: initial !important; position-anchor: initial !important; text-size-adjust: initial !important; appearance: initial !important; color: initial !important; font: initial !important; font-palette: initial !important; font-synthesis: initial !important; position-area: initial !important; text-orientation: initial !important; text-rendering: initial !important; text-spacing-trim: initial !important; -webkit-font-smoothing: initial !important; -webkit-locale: initial !important; -webkit-text-orientation: initial !important; -webkit-writing-mode: initial !important; writing-mode: initial !important; zoom: initial !important; accent-color: initial !important; place-content: initial !important; place-items: initial !important; place-self: initial !important; alignment-baseline: initial !important; anchor-name: initial !important; anchor-scope: initial !important; animation-composition: initial !important; animation: initial !important; app-region: initial !important; aspect-ratio: initial !important; backdrop-filter: initial !important; backface-visibility: initial !important; background: initial !important; background-blend-mode: initial !important; baseline-shift: initial !important; baseline-source: initial !important; block-size: initial !important; border-block: initial !important; border: initial !important; border-radius: initial !important; border-collapse: initial !important; border-end-end-radius: initial !important; border-end-start-radius: initial !important; border-inline: initial !important; border-start-end-radius: initial !important; border-start-start-radius: initial !important; inset: initial !important; box-decoration-break: initial !important; box-shadow: initial !important; box-sizing: initial !important; break-after: initial !important; break-before: initial !important; break-inside: initial !important; buffered-rendering: initial !important; caption-side: initial !important; caret-color: initial !important; clear: initial !important; clip: initial !important; clip-path: initial !important; clip-rule: initial !important; color-interpolation: initial !important; color-interpolation-filters: initial !important; color-rendering: initial !important; columns: initial !important; column-fill: initial !important; gap: initial !important; column-rule: initial !important; column-span: initial !important; contain: initial !important; contain-intrinsic-block-size: initial !important; contain-intrinsic-size: initial !important; contain-intrinsic-inline-size: initial !important; container: initial !important; content: initial !important; content-visibility: initial !important; counter-increment: initial !important; counter-reset: initial !important; counter-set: initial !important; cursor: initial !important; cx: initial !important; cy: initial !important; d: initial !important; display: initial !important; dominant-baseline: initial !important; dynamic-range-limit: initial !important; empty-cells: initial !important; field-sizing: initial !important; fill: initial !important; fill-opacity: initial !important; fill-rule: initial !important; filter: initial !important; flex: initial !important; flex-flow: initial !important; float: initial !important; flood-color: initial !important; flood-opacity: initial !important; grid: initial !important; grid-area: initial !important; height: initial !important; hyphenate-character: initial !important; hyphenate-limit-chars: initial !important; hyphens: initial !important; image-orientation: initial !important; image-rendering: initial !important; initial-letter: initial !important; inline-size: initial !important; inset-block: initial !important; inset-inline: initial !important; interpolate-size: initial !important; isolation: initial !important; letter-spacing: initial !important; lighting-color: initial !important; line-break: initial !important; list-style: initial !important; margin-block: initial !important; margin: initial !important; margin-inline: initial !important; marker: initial !important; mask-type: initial !important; math-shift: initial !important; math-style: initial !important; max-block-size: initial !important; max-height: initial !important; max-inline-size: initial !important; max-width: initial !important; min-block-size: initial !important; min-height: initial !important; min-inline-size: initial !important; min-width: initial !important; mix-blend-mode: initial !important; object-fit: initial !important; object-position: initial !important; object-view-box: initial !important; offset: initial !important; opacity: initial !important; order: initial !important; orphans: initial !important; outline: initial !important; outline-offset: initial !important; overflow-anchor: initial !important; overflow-block: initial !important; overflow-clip-margin: initial !important; overflow-inline: initial !important; overflow-wrap: initial !important; overflow: initial !important; overlay: initial !important; overscroll-behavior-block: initial !important; overscroll-behavior-inline: initial !important; overscroll-behavior: initial !important; padding-block: initial !important; padding: initial !important; padding-inline: initial !important; page: initial !important; page-orientation: initial !important; paint-order: initial !important; perspective: initial !important; perspective-origin: initial !important; pointer-events: initial !important; position-try: initial !important; position-visibility: initial !important; print-color-adjust: initial !important; quotes: initial !important; r: initial !important; reading-flow: initial !important; reading-order: initial !important; resize: initial !important; rotate: initial !important; ruby-align: initial !important; ruby-position: initial !important; rx: initial !important; ry: initial !important; scale: initial !important; scroll-behavior: initial !important; scroll-initial-target: initial !important; scroll-margin-block: initial !important; scroll-margin: initial !important; scroll-margin-inline: initial !important; scroll-marker-group: initial !important; scroll-padding-block: initial !important; scroll-padding: initial !important; scroll-padding-inline: initial !important; scroll-snap-align: initial !important; scroll-snap-stop: initial !important; scroll-snap-type: initial !important; scroll-timeline: initial !important; scrollbar-color: initial !important; scrollbar-gutter: initial !important; scrollbar-width: initial !important; shape-image-threshold: initial !important; shape-margin: initial !important; shape-outside: initial !important; shape-rendering: initial !important; size: initial !important; speak: initial !important; stop-color: initial !important; stop-opacity: initial !important; stroke: initial !important; stroke-dasharray: initial !important; stroke-dashoffset: initial !important; stroke-linecap: initial !important; stroke-linejoin: initial !important; stroke-miterlimit: initial !important; stroke-opacity: initial !important; stroke-width: initial !important; tab-size: initial !important; table-layout: initial !important; text-align: initial !important; text-align-last: initial !important; text-anchor: initial !important; text-box: initial !important; text-combine-upright: initial !important; text-decoration: initial !important; text-decoration-skip-ink: initial !important; text-emphasis: initial !important; text-emphasis-position: initial !important; text-indent: initial !important; text-overflow: initial !important; text-shadow: initial !important; text-transform: initial !important; text-underline-offset: initial !important; text-underline-position: initial !important; text-wrap: initial !important; timeline-scope: initial !important; touch-action: initial !important; transform: initial !important; transform-box: initial !important; transform-origin: initial !important; transform-style: initial !important; transition: initial !important; translate: initial !important; user-select: initial !important; vector-effect: initial !important; vertical-align: initial !important; view-timeline: initial !important; view-transition-class: initial !important; view-transition-name: initial !important; visibility: initial !important; border-spacing: initial !important; -webkit-box-align: initial !important; -webkit-box-decoration-break: initial !important; -webkit-box-direction: initial !important; -webkit-box-flex: initial !important; -webkit-box-ordinal-group: initial !important; -webkit-box-orient: initial !important; -webkit-box-pack: initial !important; -webkit-box-reflect: initial !important; -webkit-line-break: initial !important; -webkit-line-clamp: initial !important; -webkit-mask-box-image: initial !important; -webkit-rtl-ordering: initial !important; -webkit-ruby-position: initial !important; -webkit-tap-highlight-color: initial !important; -webkit-text-combine: initial !important; -webkit-text-decorations-in-effect: initial !important; -webkit-text-fill-color: unset !important; -webkit-text-security: initial !important; -webkit-text-stroke: initial !important; -webkit-user-drag: initial !important; white-space-collapse: initial !important; widows: initial !important; width: initial !important; will-change: initial !important; word-break: initial !important; word-spacing: initial !important; x: initial !important; y: initial !important; z-index: initial !important;"><svg viewBox="0 -960 960 960" width="20px" height="20px" role="button" aria-label="쇼핑 앵커 닫기" tabindex="0" style="color-scheme: initial !important; forced-color-adjust: initial !important; mask: initial !important; math-depth: initial !important; position: absolute !important; position-anchor: initial !important; text-size-adjust: initial !important; appearance: initial !important; color: initial !important; font: initial !important; font-palette: initial !important; font-synthesis: initial !important; position-area: initial !important; text-orientation: initial !important; text-rendering: initial !important; text-spacing-trim: initial !important; -webkit-font-smoothing: initial !important; -webkit-locale: initial !important; -webkit-text-orientation: initial !important; -webkit-writing-mode: initial !important; writing-mode: initial !important; zoom: initial !important; accent-color: initial !important; place-content: initial !important; place-items: initial !important; place-self: initial !important; alignment-baseline: initial !important; anchor-name: initial !important; anchor-scope: initial !important; animation-composition: initial !important; animation: initial !important; app-region: initial !important; aspect-ratio: initial !important; backdrop-filter: initial !important; backface-visibility: initial !important; background: initial !important; background-blend-mode: initial !important; baseline-shift: initial !important; baseline-source: initial !important; block-size: initial !important; border-block: initial !important; border: 0px !important; border-radius: initial !important; border-collapse: initial !important; border-end-end-radius: initial !important; border-end-start-radius: initial !important; border-inline: initial !important; border-start-end-radius: initial !important; border-start-start-radius: initial !important; bottom: initial !important; box-decoration-break: initial !important; box-shadow: none !important; box-sizing: initial !important; break-after: initial !important; break-before: initial !important; break-inside: initial !important; buffered-rendering: initial !important; caption-side: initial !important; caret-color: initial !important; clear: initial !important; clip: initial !important; clip-path: initial !important; clip-rule: initial !important; color-interpolation: initial !important; color-interpolation-filters: initial !important; color-rendering: initial !important; columns: initial !important; column-fill: initial !important; gap: initial !important; column-rule: initial !important; column-span: initial !important; contain: initial !important; contain-intrinsic-block-size: initial !important; contain-intrinsic-size: initial !important; contain-intrinsic-inline-size: initial !important; container: initial !important; content: initial !important; content-visibility: initial !important; counter-increment: initial !important; counter-reset: initial !important; counter-set: initial !important; cursor: initial !important; cx: initial !important; cy: initial !important; d: initial !important; display: inline !important; dominant-baseline: initial !important; dynamic-range-limit: initial !important; empty-cells: initial !important; field-sizing: initial !important; fill: rgb(26, 115, 232) !important; fill-opacity: initial !important; fill-rule: initial !important; filter: initial !important; flex: initial !important; flex-flow: initial !important; float: none !important; flood-color: initial !important; flood-opacity: initial !important; grid: initial !important; grid-area: initial !important; height: initial !important; hyphenate-character: initial !important; hyphenate-limit-chars: initial !important; hyphens: initial !important; image-orientation: initial !important; image-rendering: initial !important; initial-letter: initial !important; inline-size: initial !important; inset-block: initial !important; inset-inline: initial !important; interpolate-size: initial !important; isolation: initial !important; left: 13px !important; letter-spacing: initial !important; lighting-color: initial !important; line-break: initial !important; list-style: initial !important; margin-block: initial !important; margin: 0px !important; margin-inline: initial !important; marker: initial !important; mask-type: initial !important; math-shift: initial !important; math-style: initial !important; max-block-size: initial !important; max-height: initial !important; max-inline-size: initial !important; max-width: initial !important; min-block-size: initial !important; min-height: initial !important; min-inline-size: initial !important; min-width: initial !important; mix-blend-mode: initial !important; object-fit: initial !important; object-position: initial !important; object-view-box: initial !important; offset: initial !important; opacity: initial !important; order: initial !important; orphans: initial !important; outline: 0px !important; outline-offset: initial !important; overflow-anchor: initial !important; overflow-block: initial !important; overflow-clip-margin: initial !important; overflow-inline: initial !important; overflow-wrap: initial !important; overflow: initial !important; overlay: initial !important; overscroll-behavior-block: initial !important; overscroll-behavior-inline: initial !important; overscroll-behavior: initial !important; padding-block: initial !important; padding: 0px !important; padding-inline: initial !important; page: initial !important; page-orientation: initial !important; paint-order: initial !important; perspective: initial !important; perspective-origin: initial !important; pointer-events: initial !important; position-try: initial !important; position-visibility: initial !important; print-color-adjust: initial !important; quotes: initial !important; r: initial !important; reading-flow: initial !important; reading-order: initial !important; resize: initial !important; right: initial !important; rotate: initial !important; ruby-align: initial !important; ruby-position: initial !important; rx: initial !important; ry: initial !important; scale: initial !important; scroll-behavior: initial !important; scroll-initial-target: initial !important; scroll-margin-block: initial !important; scroll-margin: initial !important; scroll-margin-inline: initial !important; scroll-marker-group: initial !important; scroll-padding-block: initial !important; scroll-padding: initial !important; scroll-padding-inline: initial !important; scroll-snap-align: initial !important; scroll-snap-stop: initial !important; scroll-snap-type: initial !important; scroll-timeline: initial !important; scrollbar-color: initial !important; scrollbar-gutter: initial !important; scrollbar-width: initial !important; shape-image-threshold: initial !important; shape-margin: initial !important; shape-outside: initial !important; shape-rendering: initial !important; size: initial !important; speak: initial !important; stop-color: initial !important; stop-opacity: initial !important; stroke: initial !important; stroke-dasharray: initial !important; stroke-dashoffset: initial !important; stroke-linecap: initial !important; stroke-linejoin: initial !important; stroke-miterlimit: initial !important; stroke-opacity: initial !important; stroke-width: initial !important; tab-size: initial !important; table-layout: initial !important; text-align: initial !important; text-align-last: initial !important; text-anchor: initial !important; text-box: initial !important; text-combine-upright: initial !important; text-decoration: initial !important; text-decoration-skip-ink: initial !important; text-emphasis: initial !important; text-emphasis-position: initial !important; text-indent: initial !important; text-overflow: initial !important; text-shadow: initial !important; text-transform: initial !important; text-underline-offset: initial !important; text-underline-position: initial !important; text-wrap: initial !important; timeline-scope: initial !important; top: 15px !important; touch-action: initial !important; transform: none !important; transform-box: initial !important; transform-origin: initial !important; transform-style: initial !important; transition: initial !important; translate: initial !important; user-select: initial !important; vector-effect: initial !important; vertical-align: initial !important; view-timeline: initial !important; view-transition-class: initial !important; view-transition-name: initial !important; visibility: initial !important; border-spacing: initial !important; -webkit-box-align: initial !important; -webkit-box-decoration-break: initial !important; -webkit-box-direction: initial !important; -webkit-box-flex: initial !important; -webkit-box-ordinal-group: initial !important; -webkit-box-orient: initial !important; -webkit-box-pack: initial !important; -webkit-box-reflect: initial !important; -webkit-line-break: initial !important; -webkit-line-clamp: initial !important; -webkit-mask-box-image: initial !important; -webkit-rtl-ordering: initial !important; -webkit-ruby-position: initial !important; -webkit-tap-highlight-color: initial !important; -webkit-text-combine: initial !important; -webkit-text-decorations-in-effect: initial !important; -webkit-text-fill-color: unset !important; -webkit-text-security: initial !important; -webkit-text-stroke: initial !important; -webkit-user-drag: initial !important; white-space-collapse: initial !important; widows: initial !important; width: initial !important; will-change: initial !important; word-break: initial !important; word-spacing: initial !important; x: initial !important; y: initial !important; z-index: initial !important;"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"></path></svg></span></div><iframe name="__tcfapiLocator" src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/saved_resource(1).html" style="display: none; width: 0px; height: 0px; border: none; z-index: -1000; left: -1000px; top: -1000px;"></iframe><iframe name="googlefcInactive" src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/saved_resource(2).html" style="display: none; width: 0px; height: 0px; border: none; z-index: -1000; left: -1000px; top: -1000px;"></iframe><iframe name="googlefcLoaded" src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/saved_resource(3).html" style="display: none; width: 0px; height: 0px; border: none; z-index: -1000; left: -1000px; top: -1000px;"></iframe><iframe src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/aframe.html" width="0" height="0" style="display: none;"></iframe><div id="yhq3g5lc6foc1753317618638" class="widget-visible"><iframe src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/saved_resource(4).html" frameborder="0" scrolling="no" width="64px" height="60px" style="outline:none !important; visibility:visible !important; resize:none !important; box-shadow:none !important; overflow:visible !important; background:none !important; opacity:1 !important; filter:alpha(opacity=100) !important; -ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity 1}) !important; -mz-opacity:1 !important; -khtml-opacity:1 !important; top:auto !important; right:20px !important; bottom:20px !important; left:auto !important; position:fixed !important; border:0 !important; min-height:60px !important; min-width:64px !important; max-height:60px !important; max-width:64px !important; padding:0 !important; margin:0 !important; -moz-transition-property:none !important; -webkit-transition-property:none !important; -o-transition-property:none !important; transition-property:none !important; transform:none !important; -webkit-transform:none !important; -ms-transform:none !important; width:64px !important; height:60px !important; display:block !important; z-index:1000003 !important; background-color:transparent !important; cursor:none !important; float:none !important; border-radius:unset !important; pointer-events:auto !important; clip:auto !important; color-scheme:light !important;" id="ef8mvotc2ra41753317618756" class="" title="chat widget"></iframe><iframe src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/saved_resource(5).html" frameborder="0" scrolling="no" width="350px" height="530px" style="outline:none !important; visibility:visible !important; resize:none !important; box-shadow:none !important; overflow:visible !important; background:none !important; opacity:1 !important; filter:alpha(opacity=100) !important; -ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity 1}) !important; -mz-opacity:1 !important; -khtml-opacity:1 !important; top:auto !important; right:20px !important; bottom:98px !important; left:auto !important; position:fixed !important; border:0 !important; min-height:530px !important; min-width:350px !important; max-height:530px !important; max-width:350px !important; padding:0 !important; margin:0 !important; -moz-transition-property:none !important; -webkit-transition-property:none !important; -o-transition-property:none !important; transition-property:none !important; transform:none !important; -webkit-transform:none !important; -ms-transform:none !important; width:350px !important; height:530px !important; display:none !important; z-index:1000002 !important; background-color:transparent !important; cursor:none !important; float:none !important; border-radius:18px !important; pointer-events:auto !important; clip:auto !important; color-scheme:light !important;" id="msb1d6p2f8mo1753317618762" class="" title="chat widget"></iframe><iframe src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/saved_resource(6).html" frameborder="0" scrolling="no" height="30px" style="outline:none !important; visibility:visible !important; resize:none !important; box-shadow:none !important; overflow:visible !important; background:none !important; opacity:1 !important; filter:alpha(opacity=100) !important; -ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity 1}) !important; -mz-opacity:1 !important; -khtml-opacity:1 !important; top:auto !important; right:20px !important; bottom:30px !important; left:auto !important; position:fixed !important; border:0 !important; min-height:45px !important; min-width:350px !important; max-height:45px !important; max-width:350px !important; padding:0 !important; margin:0 !important; -moz-transition-property:none !important; -webkit-transition-property:none !important; -o-transition-property:none !important; transition-property:none !important; transform:none !important; -webkit-transform:none !important; -ms-transform:none !important; width:350px !important; height:45px !important; display:none !important; z-index:1000002 !important; background-color:transparent !important; cursor:none !important; float:none !important; border-radius:unset !important; pointer-events:auto !important; clip:auto !important; color-scheme:light !important;" id="ekjpjkveotpc1753317618764" class="" title="chat widget"></iframe><iframe src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/saved_resource(7).html" frameborder="0" scrolling="no" width="360px" height="258px" style="outline:none !important; visibility:visible !important; resize:none !important; box-shadow:none !important; overflow:visible !important; background:none !important; opacity:1 !important; filter:alpha(opacity=100) !important; -ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity 1}) !important; -mz-opacity:1 !important; -khtml-opacity:1 !important; top:auto !important; right:20px !important; bottom:90px; left:auto !important; position:fixed !important; border:0 !important; min-height:258px !important; min-width:360px !important; max-height:258px !important; max-width:360px !important; padding:0 !important; margin:0 !important; -moz-transition-property:none !important; -webkit-transition-property:none !important; -o-transition-property:none !important; transition-property:none !important; transform:none !important; -webkit-transform:none !important; -ms-transform:none !important; width:360px !important; height:258px !important; display:block !important; z-index:auto !important; background-color:transparent !important; cursor:none !important; float:none !important; border-radius:unset !important; pointer-events:auto !important; clip:auto !important; color-scheme:light !important;" id="uiht2ti3f0i1753317618760" class="" title="chat widget"></iframe><iframe src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/saved_resource(8).html" frameborder="0" scrolling="no" width="110px" height="86px" style="outline:none !important; visibility:visible !important; resize:none !important; box-shadow:none !important; overflow:visible !important; background:none !important; opacity:1 !important; filter:alpha(opacity=100) !important; -ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity 1}) !important; -mz-opacity:1 !important; -khtml-opacity:1 !important; top:auto !important; right:15px !important; bottom:43px !important; left:auto !important; position:fixed !important; border:0 !important; min-height:86px !important; min-width:110px !important; max-height:86px !important; max-width:110px !important; padding:0 !important; margin:0px 0 0 0 !important; -moz-transition-property:none !important; -webkit-transition-property:none !important; -o-transition-property:none !important; transition-property:none !important; transform:rotate(0deg) translateZ(0); -webkit-transform:rotate(0deg) translateZ(0); -ms-transform:rotate(0deg) translateZ(0); width:110px !important; height:86px !important; display:none !important; z-index:1000004 !important; background-color:transparent !important; cursor:none !important; float:none !important; border-radius:unset !important; pointer-events:auto !important; clip:auto !important; color-scheme:light !important; -moz-transform:rotate(0deg) translateZ(0); -o-transform:rotate(0deg) translateZ(0); transform-origin:0; -moz-transform-origin:0; -webkit-transform-origin:0; -o-transform-origin:0; -ms-transform-origin:0;" id="rh8t8sefg76g1753317618759" class="" title="chat widget"></iframe></div></body><iframe id="google_esf" name="google_esf" src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/zrt_lookup_fy2021.html" style="display: none;"></iframe><ins class="adsbygoogle adsbygoogle-noablate" data-adsbygoogle-status="done" style="display: none !important; width: 100vw !important; height: 100vh !important; inset: 0px auto auto 0px !important; clear: none !important; float: none !important; margin: 0px !important; max-height: none !important; max-width: none !important; opacity: 1 !important; overflow: visible !important; padding: 0px !important; position: fixed !important; vertical-align: baseline !important; visibility: visible !important; z-index: 2147483647 !important; background: transparent !important;" aria-hidden="true" data-ad-status="filled" data-vignette-loaded="true" tabindex="0"><div id="aswift_1_host" style="border: none !important; height: 100vh !important; width: 100vw !important; margin: 0px !important; padding: 0px !important; position: relative !important; visibility: visible !important; background-color: transparent !important; display: inline-block !important; inset: auto !important; clear: none !important; float: none !important; max-height: none !important; max-width: none !important; opacity: 1 !important; overflow: visible !important; vertical-align: baseline !important; z-index: auto !important;"><iframe id="aswift_1" name="aswift_1" browsingtopics="true" style="min-height: auto !important; max-height: none !important; min-width: auto !important; max-width: none !important; width: 100vw !important; height: 100vh !important; inset: 0px auto auto 0px !important; position: absolute !important; clear: none !important; display: inline !important; float: none !important; margin: 0px !important; opacity: 1 !important; overflow: visible !important; padding: 0px !important; vertical-align: baseline !important; visibility: visible !important; z-index: auto !important;" sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" width="" height="" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allow="attribution-reporting; run-ad-auction" src="./HTTPS를 사용하면 클라이언트는 데이터를 암호화해서 전달할 필요가 있을까__files/zrt_lookup_fy2021(1).html" data-google-container-id="a!2" tabindex="0" title="Advertisement" aria-label="Advertisement" data-google-query-id="CI-Olo2h1I4DFcteDwIdFZQP5A" data-load-complete="true"></iframe></div></ins></html>
